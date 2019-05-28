@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Load Font Awesome -->
+	<script src="https://use.fontawesome.com/e14e0f3537.js"></script>
+
+	<!-- Load Chosen Plugin -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+
+	<title>Friend Finder</title>
+
+	<style>
+		.topMargin {
+			margin-top: 25px;
+		}
+		#submitButton {
+			width: 100%;
+			margin-bottom: 25px;
+			line-height: 200%;
+		}
+		h3 {
+			font-weight: bold;
+		}
+		p {
+			font-size: 1.25em;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h2 class="modal-title"><strong>Your Best Match</strong></h2>
+	      </div>
+	      <div class="modal-body">
+	        <div id="friendNameDiv"></div>
+	        <img id="friendImg" class="img img-responsive" alt="" />
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+
+	<div class="container" id="questionDiv">
+		<div class="row">
+			<div class="col-lg-12">
+				<h2>Survey Questions</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<h3>About You</h3>
+			</div>
+			<div class="col-lg-12">
+				<p>Name (Required)</p>
+				<input type="text" class="form-control" id="yourName" placeholder="Your Name">
+			</div>
+			<div class="col-lg-12">
+				<p class="topMargin">Link To Photo Image (Required)</p>
+				<input type="text" class="form-control" id="yourImage" placeholder="Your Image">
+			</div>
+		</div>
+	</div>
+
+
+
+	<script type="text/javascript">
+		function createQuestions() {
+			let q1 = "I enjoy getting to know new people.";
+			let q2 = "I have a critical eye.";
+			let q3 = "I am dependable and self-disciplined.";
+			let q4 = "I can get easily upset.";
+			let q5 = "I enjoy experiencing new things.";
+			let q6 = "I can often sympathize with others.";
+			let q7 = "I try to respond to my emails as soon as possible.";
+			let q8 = "I like being creative.";
+			let q9 = "I often get so lost in my thoughts, I forget my surroundings.";
+			let q10 = "I stay relaxed under pressure.";
+			let questionArray = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10];
+			return questionArray;
+		}
+		var questions = createQuestions();
+		$("#questionDiv").append(
+			'<div class="row"><div class="col-lg-12">'
+		);
+		for (var i = 0; i < questions.length; i++) {
+			$("#questionDiv").append(
+				'<h3 class="topMargin">Question ' + (i + 1) + '</h3>'
+				+ '<p>' + questions[i] + '</p>'
+				+ '<select class="chosen-select dropList" id="q' + i + '">'
+					+ '<option value=""></option>'
+					+ '<option value="1">1 (Strongly Disagree)</option>'
+					+ '<option value="2">2</option>'
+					+ '<option value="3">3</option>'
+					+ '<option value="4">4</option>'
+					+ '<option value="5">5 (Strongly Agree)</option>'
+				+ '</select>'
+			);
+		}
+		$("#questionDiv").append(
+			'<button type="submit" class="btn btn-primary topMargin" id="submitButton"><i class="fa fa-flag-checkered" aria-hidden="true"></i> Submit</button>'
+			+ '</div></div>'
+		);
+		// Chosen Dropdown Setup
+		var config = {
+			".chosen-select": {},
+			".chosen-select-deselect": {
+				allow_single_deselect: true
+			},
+			".chosen-select-no-single": {
+				disable_search_threshold: 10
+			},
+			".chosen-select-no-results": {
+				no_results_text: "Oops, nothing found!"
+			},
+			".chosen-select-width": {
+				width: "95%"
+			}
+		};
+		for (var selector in config) {
+			$(selector).chosen(config[selector]);
+		}
+		// User clicks the submit button
+		$("#submitButton").on("click", function(event) {
+			// Don't reload the page
+			event.preventDefault();
+			// Make sure all form elements were selected
+			function userValidation() {
+				// Start with correct validation
+				let valid = true;
+				// Check if user entered yourName
+				if ($("#yourName").val() === "") {
+					// If a value is empty, validation is incorrect
+					valid = false;
+				}
+				// Check if user entered yourImg
+				if ($("#yourImage").val() === "") {
+					// If a value is empty, validation is incorrect
+					valid = false;
+				}
+				// Check if yourImg begins with "http://" or "https://"
+				if ($("#yourImage").val().charAt(4) !== ":" && $("#yourImage").val().charAt(5) !== ":") {
+					// If yourImg isn't "http://" or "https://", validation is incorrect
+					valid = false;
+				}
+				// Check dropdown boxes for empty values (top values are always empty)
+				$(".chosen-select").each(function() {
+					if ($(this).val() === "") {
+						// If a valid option has not been selected, validation is incorrect
+						valid = false;
+					}
+				});
+				// This function will return true if validation is correct, false if not
+				return valid;
+			}
+			// Move forward if validation is correct
+			if (userValidation()) {
+				// Store the user's answers
+				var formAnswers = {
+					"name": $("#yourName").val().trim(),
+					"photo": $("#yourImage").val().trim(),
+					"answers": [
+						parseInt($("#q0").val()),
+						parseInt($("#q1").val()),
+						parseInt($("#q2").val()),
+						parseInt($("#q3").val()),
+						parseInt($("#q4").val()),
+						parseInt($("#q5").val()),
+						parseInt($("#q6").val()),
+						parseInt($("#q7").val()),
+						parseInt($("#q8").val()),
+						parseInt($("#q9").val())
+					]
+				};
+				// AJAX POST to api/friends.
+				$.post("/api/friends", formAnswers, function(data) {
+					// Update the match modal with the correct name & image
+					$("#friendNameDiv").html("<h2>" + data.name + "</h2>");
+					$("#friendImg").attr("src", data.photo);
+					// Show the match modal
+					$("#myModal").modal("toggle");
+				});
+			}
+			// If the user validation failed
+			else {
+				alert("Please answer all of the questions correctly!");
+			}
+		});
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+.topMargin {
+	margin-top: 25px;
+}
+
+#submitButton {
+	width: 100%;
+	margin-bottom: 25px;
+	line-height: 200%;
+}
+
+h3 {
+	font-weight: bold;
+	color: #ff0000;
+}
+
+p {
+	font-size: 1.25em;
+}

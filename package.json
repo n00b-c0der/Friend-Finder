@@ -1,0 +1,24 @@
+{
+  "name": "w12-friend-finder",
+  "version": "1.0.0",
+  "description": "HW",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n00b-c0der/Friend-Finder.git"
+  },
+  "author": "Tyler Harrison",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n00b-c0der/Friend-Finder/issues"
+  },
+  "homepage": "https://github.com/n00b-c0der/Friend-Finder#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
