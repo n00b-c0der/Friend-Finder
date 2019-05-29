@@ -1,4 +1,4 @@
-[
+  var friends = [ 
     {
     "name": "Starlord",
     "photo": "https://static.independent.co.uk/s3fs-public/styles/article_small/public/thumbnails/image/2015/06/06/15/Chris-Pratt.jpg",
@@ -128,3 +128,5 @@
     ]
     }
     ]
+
+    module.exports = friends;
